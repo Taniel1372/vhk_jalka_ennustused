@@ -1,187 +1,210 @@
-// ===== STATE (safe, isolated) =====
-const Tournament = {
-  q: 1,
-  koht: 1,
-  on: false
-};
+let q = 1;
+let koht = 1;
+let on = false;
 
-// ===== TEAMS =====
-const teams = {
-  r: ["10R", "11R", "12R"],
-  h: ["10H", "11H", "12H"],
-  m: ["10M", "11M", "12M"],
-  k: ["10A/K/C", "11A/K/C", "12K/C"]
-};
+// TEAMS
+const r_10 = "10R", r_11 = "11R", r_12 = "12R";
+const h_10 = "10H", h_11 = "11H", h_12 = "12H";
+const m_10 = "10M", m_11 = "11M", m_12 = "12M";
+const k_10 = "10A/K/C", k_11 = "11A/K/C", k_12 = "12K/C";
 
-// ===== CORE FUNCTION =====
+// ---------------- PICK WINNER ----------------
 function pickWinner(team) {
-  const { q } = Tournament;
 
-  const set = (key, value) => localStorage.setItem(key, value);
+  // ===== GROUP STAGE =====
+  if (koht == 1 && q == 1) {
+    localStorage.setItem("a1", team == 1 ? r_10 : team == 2 ? r_11 : r_12);
+  }
 
-  // ---- GROUP STAGE ----
-  if (Tournament.koht === 1) {
-    const map = {
-      1: ["a1", teams.r],
-      2: ["b1", teams.h],
-      3: ["c1", teams.m],
-      4: ["d1", teams.k]
-    };
+  else if (koht == 1 && q == 2) {
+    localStorage.setItem("b1", team == 1 ? h_10 : team == 2 ? h_11 : h_12);
+  }
 
-    const [key, arr] = map[q];
-    set(key, arr[team - 1]);
+  else if (koht == 1 && q == 3) {
+    localStorage.setItem("c1", team == 1 ? m_10 : team == 2 ? m_11 : m_12);
+  }
 
-    disableButton(team);
-    Tournament.koht++;
+  else if (koht == 1 && q == 4) {
+    localStorage.setItem("d1", team == 1 ? k_10 : team == 2 ? k_11 : k_12);
+  }
+
+  // ===== AFTER FIRST PICK IN GROUP =====
+  if (koht == 1) {
+    document.getElementById("bt" + team).disabled = true;
+    document.getElementById("bt" + team).style.background = "#70cbef";
+    koht++;
     return;
   }
 
-  // ---- STAGE ADVANCE ----
-  if (q === 1) {
-    set("a2", teams.r[team - 1]);
-    switchGroup("Alagrupp B", teams.h);
+  // ================= NEXT STAGES =================
+  if (q == 1 && koht == 2) {
+    localStorage.setItem("a2", team == 1 ? r_10 : team == 2 ? r_11 : r_12);
+
+    document.getElementById("group").innerText = "Alagrupp B";
+    document.getElementById("bt1").innerText = h_10;
+    document.getElementById("bt2").innerText = h_11;
+    document.getElementById("bt3").innerText = h_12;
+
+    q++; koht = 1;
   }
 
-  if (q === 2) {
-    set("b2", teams.h[team - 1]);
-    switchGroup("Alagrupp C", teams.m);
+  else if (q == 2 && koht == 2) {
+    localStorage.setItem("b2", team == 1 ? h_10 : team == 2 ? h_11 : h_12);
+
+    document.getElementById("group").innerText = "Alagrupp C";
+    document.getElementById("bt1").innerText = m_10;
+    document.getElementById("bt2").innerText = m_11;
+    document.getElementById("bt3").innerText = m_12;
+
+    q++; koht = 1;
   }
 
-  if (q === 3) {
-    set("c2", teams.m[team - 1]);
-    switchGroup("Alagrupp D", teams.k);
+  else if (q == 3 && koht == 2) {
+    localStorage.setItem("c2", team == 1 ? m_10 : team == 2 ? m_11 : m_12);
+
+    document.getElementById("group").innerText = "Alagrupp D";
+    document.getElementById("bt1").innerText = k_10;
+    document.getElementById("bt2").innerText = k_11;
+    document.getElementById("bt3").innerText = k_12;
+
+    q++; koht = 1;
   }
 
-  if (q === 4) {
-    set("d2", teams.k[team - 1]);
-    startQuarterFinals();
+  else if (q == 4 && koht == 2) {
+    localStorage.setItem("d2", team == 1 ? k_10 : team == 2 ? k_11 : k_12);
+
+    document.getElementById("bt1").style.background = "#2363ec";
+    document.getElementById("bt2").style.background = "#2363ec";
+    document.getElementById("loll")?.remove();
+    document.getElementById("bt3")?.remove();
+
+    document.getElementById("group").innerText = "1/4";
+
+    document.getElementById("bt1").innerText = localStorage.getItem("a1");
+    document.getElementById("bt2").innerText = localStorage.getItem("b2");
+
+    q++; koht = 1;
   }
 
-  if (q === 5) {
-    set("a14", team === 1 ? get("a1") : get("b2"));
-    set("a24", team === 1 ? get("b2") : get("a1"));
-    setMatch(["c1", "d2"]);
+  else if (q == 5 && koht == 2) {
+    localStorage.setItem("a14", team == 1 ? localStorage.getItem("a1") : localStorage.getItem("b2"));
+    localStorage.setItem("a24", team == 1 ? localStorage.getItem("b2") : localStorage.getItem("a1"));
+
+    document.getElementById("bt1").innerText = localStorage.getItem("c1");
+    document.getElementById("bt2").innerText = localStorage.getItem("d2");
+
+    q++; koht = 1;
   }
 
-  if (q === 6) {
-    set("b14", team === 1 ? get("c1") : get("d2"));
-    set("b24", team === 1 ? get("d2") : get("c1"));
-    setMatch(["a2", "b1"]);
+  else if (q == 6 && koht == 2) {
+    localStorage.setItem("b14", team == 1 ? localStorage.getItem("c1") : localStorage.getItem("d2"));
+    localStorage.setItem("b24", team == 1 ? localStorage.getItem("d2") : localStorage.getItem("c1"));
+
+    document.getElementById("bt1").innerText = localStorage.getItem("a2");
+    document.getElementById("bt2").innerText = localStorage.getItem("b1");
+
+    q++; koht = 1;
   }
 
-  if (q === 7) {
-    set("c14", team === 1 ? get("a2") : get("b1"));
-    set("c24", team === 1 ? get("b1") : get("a2"));
-    setMatch(["c2", "d1"]);
+  else if (q == 7 && koht == 2) {
+    localStorage.setItem("c14", team == 1 ? localStorage.getItem("a2") : localStorage.getItem("b1"));
+    localStorage.setItem("c24", team == 1 ? localStorage.getItem("b1") : localStorage.getItem("a2"));
+
+    document.getElementById("bt1").innerText = localStorage.getItem("c2");
+    document.getElementById("bt2").innerText = localStorage.getItem("d1");
+
+    q++; koht = 1;
   }
 
-  if (q === 8) {
-    set("d14", team === 1 ? get("c2") : get("d1"));
-    set("group", "1/2");
-    setMatch(["a14", "b14"]);
+  else if (q == 8 && koht == 2) {
+    localStorage.setItem("d14", team == 1 ? localStorage.getItem("c2") : localStorage.getItem("d1"));
+
+    document.getElementById("group").innerText = "1/2";
+
+    document.getElementById("bt1").innerText = localStorage.getItem("a14");
+    document.getElementById("bt2").innerText = localStorage.getItem("b14");
+
+    q++; koht = 1;
   }
 
-  if (q === 9) {
-    set("a12", team === 1 ? get("a14") : get("b14"));
-    setMatch(["c14", "d14"]);
+  else if (q == 9 && koht == 2) {
+    localStorage.setItem("a12", team == 1 ? localStorage.getItem("a14") : localStorage.getItem("b14"));
+
+    document.getElementById("bt1").innerText = localStorage.getItem("c14");
+    document.getElementById("bt2").innerText = localStorage.getItem("d14");
+
+    q++; koht = 1;
   }
 
-  if (q === 10) {
-    set("b12", team === 1 ? get("c14") : get("d14"));
-    set("group", "3/4");
-    setMatch(["a13", "b13"]);
+  else if (q == 10 && koht == 2) {
+    localStorage.setItem("b12", team == 1 ? localStorage.getItem("c14") : localStorage.getItem("d14"));
+
+    document.getElementById("group").innerText = "3/4";
+
+    document.getElementById("bt1").innerText = localStorage.getItem("a13");
+    document.getElementById("bt2").innerText = localStorage.getItem("b13");
+
+    q++; koht = 1;
   }
 
-  if (q === 11) {
-    set("w3", team === 1 ? get("a13") : get("b13"));
-    set("w4", team === 1 ? get("b13") : get("a13"));
-    setMatch(["a12", "b12"]);
+  else if (q == 11 && koht == 2) {
+    localStorage.setItem("w3", team == 1 ? localStorage.getItem("a13") : localStorage.getItem("b13"));
+
+    document.getElementById("group").innerText = "Finaal";
+
+    document.getElementById("bt1").innerText = localStorage.getItem("a12");
+    document.getElementById("bt2").innerText = localStorage.getItem("b12");
+
+    q++; koht = 1;
   }
 
-  if (q === 12) {
-    set("w1", team === 1 ? get("a12") : get("b12"));
-    set("w2", team === 1 ? get("b12") : get("a12"));
+  else if (q == 12 && koht == 2) {
+    localStorage.setItem("w1", team == 1 ? localStorage.getItem("a12") : localStorage.getItem("b12"));
 
     const bracketData = {};
-    Object.keys(localStorage).forEach(k => {
-      bracketData[k] = localStorage.getItem(k);
-    });
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      bracketData[key] = localStorage.getItem(key);
+    }
 
-    saveBracket(bracketData, get("name"));
+    saveBracket(bracketData, localStorage.getItem("name"));
 
-    endTournament();
+    document.getElementById("bt1").remove();
+    document.getElementById("bt2").remove();
+    document.getElementById("group").innerText = "Sisesta nimi";
   }
 
-  Tournament.q++;
-  resetButtons(team);
+  // RESET UI
+  document.getElementById("bt1").disabled = false;
+  document.getElementById("bt2").disabled = false;
+  document.getElementById("bt3")?.remove?.();
+
+  document.getElementById("bt1").style.background = "#2363ec";
+  document.getElementById("bt2").style.background = "#2363ec";
+
+  document.getElementById("bt" + team).style.background = "#70cbef";
 }
 
-// ===== HELPERS =====
-function get(k) {
-  return localStorage.getItem(k);
-}
-
-function setMatch(keys) {
-  document.getElementById("bt1").innerText = get(keys[0]);
-  document.getElementById("bt2").innerText = get(keys[1]);
-}
-
-function switchGroup(name, newTeams) {
-  document.getElementById("group").innerText = name;
-  document.getElementById("bt1").innerText = newTeams[0];
-  document.getElementById("bt2").innerText = newTeams[1];
-  document.getElementById("bt3").innerText = newTeams[2];
-  Tournament.koht = 1;
-}
-
-function disableButton(team) {
-  const btn = document.getElementById("bt" + team);
-  btn.disabled = true;
-  btn.style.background = "#70cbef";
-}
-
-function resetButtons(team) {
-  ["bt1", "bt2", "bt3"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.disabled = false;
-      el.style.background = "#2363ec";
-    }
-  });
-
-  const active = document.getElementById("bt" + team);
-  if (active) active.style.background = "#70cbef";
-}
-
-// ===== FINAL SCREEN =====
-function endTournament() {
-  document.getElementById("bt1")?.remove();
-  document.getElementById("bt2")?.remove();
-  document.getElementById("bt3")?.remove();
-
-  document.getElementById("group").innerText = "Sisesta nimi";
-}
-
-// ===== SAVE =====
+// ---------------- SAVE ----------------
 async function saveBracket(brack, name) {
-  const res = await fetch("http://localhost:3000/save-bracket", {
+  const response = await fetch("http://localhost:3000/save-bracket", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ bracket: brack, name })
   });
 
-  return await res.json();
+  console.log(await response.json());
 }
 
-// ===== NAME =====
+// ---------------- NAME ----------------
 function saveName(event) {
   event.preventDefault();
 
   const nimi = document.getElementById("nimi").value;
   localStorage.setItem("name", nimi);
 
-  Tournament.on = true;
-
+  on = true;
   alert("Nimi salvestatud: " + nimi);
-  document.getElementById("vorm")?.remove();
+
+  document.getElementById("vorm").remove();
 }
