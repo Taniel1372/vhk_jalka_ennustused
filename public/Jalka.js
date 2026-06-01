@@ -1,192 +1,195 @@
-let q = 1;        // stage (A-D groups + knockouts)
-let step = 1;     // 1 = first pick, 2 = second pick
+let q = 1;
+let koht = 1;
 let on = false;
 
-// ===== TEAM DATA =====
-const groups = [
-  ["10R", "11R", "12R", "a"],
-  ["10H", "11H", "12H", "b"],
-  ["10M", "11M", "12M", "c"],
-  ["10A/K/C", "11A/K/C", "12K/C", "d"]
-];
+// TEAMS
+const r_10 = "10R", r_11 = "11R", r_12 = "12R";
+const h_10 = "10H", h_11 = "11H", h_12 = "12H";
+const m_10 = "10M", m_11 = "11M", m_12 = "12M";
+const k_10 = "10A/K/C", k_11 = "11A/K/C", k_12 = "12K/C";
 
-// ===== MAIN =====
+// ================= CHECK IF READY =================
+function isReady() {
+  return localStorage.getItem("name") && on === true;
+}
+
+// ================= MAIN =================
 function pickWinner(team) {
 
-  const g = groups[q - 1];
+  // BLOCK EVERYTHING UNTIL NAME EXISTS
+  if (!isReady()) {
+    alert("Sisesta nimi enne mängu jätkamist!");
+    return;
+  }
 
-  // ================= FIRST PICK =================
-  if (step === 1) {
-    localStorage.setItem(g[3] + "1", g[team - 1]);
+  // ================= GROUP PICKS (FIRST CLICK) =================
+  if (koht == 1 && q == 1) {
+    localStorage.setItem("a1", team == 1 ? r_10 : team == 2 ? r_11 : r_12);
+  }
+  else if (koht == 1 && q == 2) {
+    localStorage.setItem("b1", team == 1 ? h_10 : team == 2 ? h_11 : h_12);
+  }
+  else if (koht == 1 && q == 3) {
+    localStorage.setItem("c1", team == 1 ? m_10 : team == 2 ? m_11 : m_12);
+  }
+  else if (koht == 1 && q == 4) {
+    localStorage.setItem("d1", team == 1 ? k_10 : team == 2 ? k_11 : k_12);
+  }
 
+  // FIRST CLICK = lock selection
+  if (koht == 1) {
     document.getElementById("bt" + team).disabled = true;
     document.getElementById("bt" + team).style.background = "#70cbef";
-
-    step = 2;
+    koht = 2;
     return;
   }
 
-  // ================= SECOND PICK =================
-  const winner = g[team - 1];
+  // ================= SECOND CLICK (ONLY IF READY) =================
+  if (koht == 2 && isReady()) {
 
-  // GROUP STAGES A–D
-  if (q <= 4) {
+    if (q == 1) {
+      localStorage.setItem("a2", team == 1 ? r_10 : team == 2 ? r_11 : r_12);
 
-    localStorage.setItem(g[3] + "2", winner);
-
-    q++;
-    step = 1;
-
-    if (q <= 4) {
-      loadNextGroup();
+      document.getElementById("group").innerText = "Alagrupp B";
+      document.getElementById("bt1").innerText = h_10;
+      document.getElementById("bt2").innerText = h_11;
+      document.getElementById("bt3").innerText = h_12;
     }
 
-    if (q === 5) {
-      startQuarterFinals();
+    else if (q == 2) {
+      localStorage.setItem("b2", team == 1 ? h_10 : team == 2 ? h_11 : h_12);
+
+      document.getElementById("group").innerText = "Alagrupp C";
+      document.getElementById("bt1").innerText = m_10;
+      document.getElementById("bt2").innerText = m_11;
+      document.getElementById("bt3").innerText = m_12;
     }
 
-    return;
-  }
+    else if (q == 3) {
+      localStorage.setItem("c2", team == 1 ? m_10 : team == 2 ? m_11 : m_12);
 
-  // ================= QUARTER FINALS =================
-  if (q === 5) {
-    localStorage.setItem("a14", winner);
-    setupMatch(localStorage.getItem("c1"), localStorage.getItem("d2"));
-    q++;
-    step = 1;
-    return;
-  }
-
-  if (q === 6) {
-    localStorage.setItem("b14", winner);
-    setupMatch(localStorage.getItem("a2"), localStorage.getItem("b1"));
-    q++;
-    step = 1;
-    return;
-  }
-
-  if (q === 7) {
-    localStorage.setItem("c14", winner);
-    setupMatch(localStorage.getItem("c2"), localStorage.getItem("d1"));
-    q++;
-    step = 1;
-    return;
-  }
-
-  if (q === 8) {
-    localStorage.setItem("d14", winner);
-    document.getElementById("group").innerText = "1/2";
-    setupMatch(
-      localStorage.getItem("a14"),
-      localStorage.getItem("b14")
-    );
-    q++;
-    step = 1;
-    return;
-  }
-
-  // ================= SEMI FINAL =================
-  if (q === 9) {
-    localStorage.setItem("a12", winner);
-    setupMatch(
-      localStorage.getItem("c14"),
-      localStorage.getItem("d14")
-    );
-    q++;
-    step = 1;
-    return;
-  }
-
-  if (q === 10) {
-    localStorage.setItem("b12", winner);
-    document.getElementById("group").innerText = "3/4";
-    setupMatch(
-      localStorage.getItem("a13"),
-      localStorage.getItem("b13")
-    );
-    q++;
-    step = 1;
-    return;
-  }
-
-  // ================= FINAL + 3RD =================
-  if (q === 11) {
-    localStorage.setItem("w3", winner);
-    document.getElementById("group").innerText = "Finaal";
-    setupMatch(
-      localStorage.getItem("a12"),
-      localStorage.getItem("b12")
-    );
-    q++;
-    step = 1;
-    return;
-  }
-
-  if (q === 12) {
-    localStorage.setItem("w1", winner);
-
-    const bracketData = {};
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      bracketData[key] = localStorage.getItem(key);
+      document.getElementById("group").innerText = "Alagrupp D";
+      document.getElementById("bt1").innerText = k_10;
+      document.getElementById("bt2").innerText = k_11;
+      document.getElementById("bt3").innerText = k_12;
     }
 
-    saveBracket(bracketData, localStorage.getItem("name"));
+    else if (q == 4) {
+      localStorage.setItem("d2", team == 1 ? k_10 : team == 2 ? k_11 : k_12);
 
-    document.getElementById("bt1").remove();
-    document.getElementById("bt2").remove();
-    document.getElementById("bt3").remove();
+      document.getElementById("bt1").style.background = "#2363ec";
+      document.getElementById("bt2").style.background = "#2363ec";
+      document.getElementById("loll")?.remove();
+      document.getElementById("bt3")?.remove();
 
-    document.getElementById("group").innerText = "Sisesta nimi";
-    return;
+      document.getElementById("group").innerText = "1/4";
+
+      document.getElementById("bt1").innerText = localStorage.getItem("a1");
+      document.getElementById("bt2").innerText = localStorage.getItem("b2");
+    }
+
+    else if (q == 5) {
+      localStorage.setItem("a14", team == 1 ? localStorage.getItem("a1") : localStorage.getItem("b2"));
+      localStorage.setItem("a24", team == 1 ? localStorage.getItem("b2") : localStorage.getItem("a1"));
+
+      document.getElementById("bt1").innerText = localStorage.getItem("c1");
+      document.getElementById("bt2").innerText = localStorage.getItem("d2");
+    }
+
+    else if (q == 6) {
+      localStorage.setItem("b14", team == 1 ? localStorage.getItem("c1") : localStorage.getItem("d2"));
+      localStorage.setItem("b24", team == 1 ? localStorage.getItem("d2") : localStorage.getItem("c1"));
+
+      document.getElementById("bt1").innerText = localStorage.getItem("a2");
+      document.getElementById("bt2").innerText = localStorage.getItem("b1");
+    }
+
+    else if (q == 7) {
+      localStorage.setItem("c14", team == 1 ? localStorage.getItem("a2") : localStorage.getItem("b1"));
+      localStorage.setItem("c24", team == 1 ? localStorage.getItem("b1") : localStorage.getItem("a2"));
+
+      document.getElementById("bt1").innerText = localStorage.getItem("c2");
+      document.getElementById("bt2").innerText = localStorage.getItem("d1");
+    }
+
+    else if (q == 8) {
+      localStorage.setItem("d14", team == 1 ? localStorage.getItem("c2") : localStorage.getItem("d1"));
+
+      document.getElementById("group").innerText = "1/2";
+
+      document.getElementById("bt1").innerText = localStorage.getItem("a14");
+      document.getElementById("bt2").innerText = localStorage.getItem("b14");
+    }
+
+    else if (q == 9) {
+      localStorage.setItem("a12", team == 1 ? localStorage.getItem("a14") : localStorage.getItem("b14"));
+
+      document.getElementById("bt1").innerText = localStorage.getItem("c14");
+      document.getElementById("bt2").innerText = localStorage.getItem("d14");
+    }
+
+    else if (q == 10) {
+      localStorage.setItem("b12", team == 1 ? localStorage.getItem("c14") : localStorage.getItem("d14"));
+
+      document.getElementById("group").innerText = "3/4";
+
+      document.getElementById("bt1").innerText = localStorage.getItem("a13");
+      document.getElementById("bt2").innerText = localStorage.getItem("b13");
+    }
+
+    else if (q == 11) {
+      localStorage.setItem("w3", team == 1 ? localStorage.getItem("a13") : localStorage.getItem("b13"));
+
+      document.getElementById("group").innerText = "Finaal";
+
+      document.getElementById("bt1").innerText = localStorage.getItem("a12");
+      document.getElementById("bt2").innerText = localStorage.getItem("b12");
+    }
+
+    else if (q == 12) {
+      localStorage.setItem("w1", team == 1 ? localStorage.getItem("a12") : localStorage.getItem("b12"));
+
+      const bracketData = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        bracketData[key] = localStorage.getItem(key);
+      }
+
+      saveBracket(bracketData, localStorage.getItem("name"));
+
+      document.getElementById("bt1").remove();
+      document.getElementById("bt2").remove();
+      document.getElementById("group").innerText = "Sisesta nimi";
+    }
+
+    // ADVANCE ONLY AFTER VALID SECOND CLICK
+    q++;
+    koht = 1;
   }
-}
 
-// ===== HELPERS =====
-function loadNextGroup() {
-  const g = groups[q - 1];
-
-  document.getElementById("group").innerText =
-    q === 2 ? "Alagrupp B" :
-    q === 3 ? "Alagrupp C" :
-    q === 4 ? "Alagrupp D" : "";
-
-  document.getElementById("bt1").innerText = g[0];
-  document.getElementById("bt2").innerText = g[1];
-  document.getElementById("bt3").innerText = g[2];
-
-  resetButtons();
-}
-
-function setupMatch(a, b) {
-  document.getElementById("bt1").innerText = a;
-  document.getElementById("bt2").innerText = b;
-  resetButtons();
-}
-
-function resetButtons() {
-  step = 1;
-
+  // ================= RESET UI =================
   document.getElementById("bt1").disabled = false;
   document.getElementById("bt2").disabled = false;
-  document.getElementById("bt3")?.remove?.();
+  document.getElementById("bt3")?.remove();
 
   document.getElementById("bt1").style.background = "#2363ec";
   document.getElementById("bt2").style.background = "#2363ec";
+
+  document.getElementById("bt" + team).style.background = "#70cbef";
 }
 
-// ===== SAVE =====
+// ================= SAVE =================
 async function saveBracket(brack, name) {
-  const res = await fetch("http://localhost:3000/save-bracket", {
+  const response = await fetch("http://localhost:3000/save-bracket", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ bracket: brack, name })
   });
 
-  console.log(await res.json());
+  console.log(await response.json());
 }
 
-// ===== NAME =====
+// ================= NAME =================
 function saveName(event) {
   event.preventDefault();
 
