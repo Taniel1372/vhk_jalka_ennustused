@@ -176,14 +176,11 @@ function pickWinner(team) {
         w2: localStorage.getItem("w2"),
         w3: localStorage.getItem("w3"),
         w4: localStorage.getItem("w4"),
+        
       };
 
       saveBracket(bracketData, localStorage.getItem("name"));
-
-      document.getElementById("bt1").remove();
-      document.getElementById("bt2").remove();
-      document.getElementById("bt3").remove();
-      document.getElementById("group").innerText = "Sisesta nimi";
+      bracket();
     }
 
     q++;
@@ -197,27 +194,7 @@ function pickWinner(team) {
 
 // ================= BRACKET =================
 function bracket() {
-  document.getElementById("smegma").innerHTML = `
-    <h1>VHK gümnaasiumi jalgpalliturniir</h1>
-
-    <div id="a1"></div>
-    <div id="a2"></div>
-    <div id="b1"></div>
-    <div id="b2"></div>
-    <div id="c1"></div>
-    <div id="c2"></div>
-    <div id="d1"></div>
-    <div id="d2"></div>
-
-    <div id="a14"></div>
-    <div id="b14"></div>
-    <div id="c14"></div>
-    <div id="d14"></div>
-
-    <div id="a12"></div>
-    <div id="b12"></div>
-  `;
-
+  document.getElementById("smegma").innerHTML = "<form><input type='text' value='Eesnimi'><br><input type='text' value='Eesnimi'><br><input type='submit' onclick='bracket()' value='nEG'>";
   document.getElementById("a1").innerText = localStorage.getItem("a1");
   document.getElementById("a2").innerText = localStorage.getItem("a2");
   document.getElementById("b1").innerText = localStorage.getItem("b1");
