@@ -12,7 +12,7 @@ const m_12 = "12M";
 const k_10 = "10A/K/C";
 const k_11 = "11A/K/C";
 const k_12 = "12K/C";
-on=false;
+let on=false;
 
 
 function pickWinner(team) {
@@ -171,7 +171,7 @@ else {
   document.getElementById("bt2").style.background = "#2363ec";
   document.getElementById("bt3").style.background = "#2363ec";
 }
-  if (q=13 and on){
+  if (q==13 && on){
     bracket();
   }
 function bracket(){
