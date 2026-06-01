@@ -12,6 +12,7 @@ const m_12 = "12M";
 const k_10 = "10A/K/C";
 const k_11 = "11A/K/C";
 const k_12 = "12K/C";
+on=false;
 
 
 function pickWinner(team) {
@@ -156,7 +157,9 @@ else {
     w4: localStorage.getItem("w4"),
   };
   saveBracket(bracketData, localStorage.getItem("name"));
-  
+  if (on){
+    bracket();
+  }
   }
   q++;
   document.getElementById("bt1").disabled = false;
@@ -209,6 +212,7 @@ function saveName(event) {
   const nimi = document.getElementById("nimi").value;
 
   localStorage.setItem("name", nimi);
+  on=true;
 
   // optional: move to game screen
   alert("Nimi salvestatud: " + nimi);
