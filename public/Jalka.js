@@ -1,225 +1,187 @@
-let q = 1;
-let koht = 1;
-const r_10 = "10R";
-const r_11 = "11R";
-const r_12 = "12R";
-const h_10 = "10H";
-const h_11 = "11H";
-const h_12 = "12H";
-const m_10 = "10M";
-const m_11 = "11M";
-const m_12 = "12M";
-const k_10 = "10A/K/C";
-const k_11 = "11A/K/C";
-const k_12 = "12K/C";
-let on=false;
+// ===== STATE (safe, isolated) =====
+const Tournament = {
+  q: 1,
+  koht: 1,
+  on: false
+};
 
+// ===== TEAMS =====
+const teams = {
+  r: ["10R", "11R", "12R"],
+  h: ["10H", "11H", "12H"],
+  m: ["10M", "11M", "12M"],
+  k: ["10A/K/C", "11A/K/C", "12K/C"]
+};
 
+// ===== CORE FUNCTION =====
 function pickWinner(team) {
-if (koht==1 && q==1){
-  localStorage.setItem("a1", (team==1) ? r_10 :(team==2) ? r_11: r_12);
-  document.getElementById("bt"+ team).disabled = true;
-  document.getElementById("bt"+ team).style.background = "#70cbef";
-  koht++;
-}
-else if (koht==1 && q==2){
-  localStorage.setItem("b1", (team==1) ? h_10 :(team==2) ? h_11: h_12);
-  document.getElementById("bt"+ team).disabled = true;
-  document.getElementById("bt"+ team).style.background = "#70cbef";
-  koht++;
-}
-else if (koht==1 && q==3){
-  localStorage.setItem("c1", (team==1) ? m_10 :(team==2) ? m_11: m_12);
-  document.getElementById("bt"+ team).disabled = true;
-  document.getElementById("bt"+ team).style.background = "#70cbef";
-  koht++;
-}
-else if (koht==1 && q==4){
-  localStorage.setItem("d1", (team==1) ? k_10 :(team==2) ? k_11: k_12);
-  document.getElementById("bt"+ team).disabled = true;
-  document.getElementById("bt"+ team).style.background = "#70cbef";
-  koht++;
-}
-else {
-  if (q==1){
-  localStorage.setItem("a2", (team==1) ? r_10:(team==2) ? r_11: r_12);
-  document.getElementById("group").innerText = "Alagrupp B";
-  document.getElementById("bt1").innerText = h_10;
-  document.getElementById("bt2").innerText = h_11;
-  document.getElementById("bt3").innerText = h_12;
-  koht = 1;
-  }
-  if (q==2){
-  localStorage.setItem("b2", (team==1) ? h_10: (team==2) ? h_11: h_12);
-  document.getElementById("group").innerText = "Alagrupp C";
-  document.getElementById("bt3").style.background = "#2363ec";
-  document.getElementById("bt1").innerText = m_10;
-  document.getElementById("bt2").innerText = m_11;
-  document.getElementById("bt3").innerText = m_12;
-  koht = 1;
-  }
-  if (q==3){
-  localStorage.setItem("c2", (team==1) ? m_10: (team==2) ? m_11: m_12);
-  document.getElementById("group").innerText = "Alagrupp D";
-  document.getElementById("bt1").innerText = k_10;
-  document.getElementById("bt2").innerText = k_11;
-  document.getElementById("bt3").innerText = k_12;
-  koht = 1;
-  }
-  if (q==4){
-  localStorage.setItem("d2", (team==1) ? k_10: (team==2) ? k_11: k_12);
-  document.getElementById("bt1").style.background = "#2363ec";
-  document.getElementById("bt2").style.background = "#2363ec";
-  document.getElementById("loll").remove();
-  document.getElementById("bt3").remove();
-  document.getElementById("group").innerText = "1/4";
-  document.getElementById("bt1").innerText = localStorage.getItem("a1");
-  document.getElementById("bt2").innerText = localStorage.getItem("b2");
+  const { q } = Tournament;
 
-  }
-  if (q==5){
-  localStorage.setItem("a14", (team==1) ? localStorage.getItem("a1"): localStorage.getItem("b2"));
-  localStorage.setItem("a24", (team==1) ? localStorage.getItem("b2"): localStorage.getItem("a1"));
-  document.getElementById("bt1").innerText = localStorage.getItem("c1");
-  document.getElementById("bt2").innerText = localStorage.getItem("d2");
-  }
-  if (q==6){
-  localStorage.setItem("b14", (team==1) ? localStorage.getItem("c1"): localStorage.getItem("d2"));
-  localStorage.setItem("b24", (team==1) ? localStorage.getItem("d2"): localStorage.getItem("c1"));
-  document.getElementById("bt1").innerText = localStorage.getItem("a2");
-  document.getElementById("bt2").innerText = localStorage.getItem("b1");
-  }
-  if (q==7){
-  localStorage.setItem("c14", (team==1) ? localStorage.getItem("a2"): localStorage.getItem("b1"));
-  localStorage.setItem("c24", (team==1) ? localStorage.getItem("b1"): localStorage.getItem("a2"));
-  document.getElementById("bt1").innerText = localStorage.getItem("c2");
-  document.getElementById("bt2").innerText = localStorage.getItem("d1");
-  }
-  if (q==8){
-  localStorage.setItem("d14", (team==1) ? localStorage.getItem("c2"): localStorage.getItem("d1"));
-  localStorage.setItem("d24", (team==1) ? localStorage.getItem("d1"): localStorage.getItem("c2"));
-  document.getElementById("group").innerText = "1/2";
-  document.getElementById("bt1").innerText = localStorage.getItem("a14");
-  document.getElementById("bt2").innerText = localStorage.getItem("b14");
-  }
-  if (q==9){
-  localStorage.setItem("a12", (team==1) ? localStorage.getItem("a14"): localStorage.getItem("b14"));
-  localStorage.setItem("a13", (team==1) ? localStorage.getItem("b14"): localStorage.getItem("a14"));
-  document.getElementById("bt1").innerText = localStorage.getItem("c14");
-  document.getElementById("bt2").innerText = localStorage.getItem("d14");
-  }
-  if (q==10){
-  localStorage.setItem("b12", (team==1) ? localStorage.getItem("c14"): localStorage.getItem("d14"));
-  localStorage.setItem("b13", (team==1) ? localStorage.getItem("d14"): localStorage.getItem("c14"));
-  document.getElementById("group").innerText = "3/4";
-  document.getElementById("bt1").innerText = localStorage.getItem("a13");
-  document.getElementById("bt2").innerText = localStorage.getItem("b13");
-  }
-  if (q==11){
-  localStorage.setItem("w3", (team==1) ? localStorage.getItem("a13"): localStorage.getItem("b13"));
-  localStorage.setItem("w4", (team==1) ? localStorage.getItem("b13"): localStorage.getItem("a13"));
-  document.getElementById("group").innerText = "Finaal";
-  document.getElementById("bt1").innerText = localStorage.getItem("a12");
-  document.getElementById("bt2").innerText = localStorage.getItem("b12");
-  }
-  if (q==12){
-  localStorage.setItem("w1", (team==1) ? localStorage.getItem("a12"): localStorage.getItem("b12"));
-  localStorage.setItem("w2", (team==1) ? localStorage.getItem("b12"): localStorage.getItem("a12"));
+  const set = (key, value) => localStorage.setItem(key, value);
 
-    const bracketData = {
-    a1: localStorage.getItem("a1"),
-    a2: localStorage.getItem("a2"),
-    a12: localStorage.getItem("a12"),
-    a13: localStorage.getItem("a13"),
-    a14: localStorage.getItem("a14"),
-    a24: localStorage.getItem("a24"),
+  // ---- GROUP STAGE ----
+  if (Tournament.koht === 1) {
+    const map = {
+      1: ["a1", teams.r],
+      2: ["b1", teams.h],
+      3: ["c1", teams.m],
+      4: ["d1", teams.k]
+    };
 
-    b1: localStorage.getItem("b1"),
-    b2: localStorage.getItem("b2"),
-    b12: localStorage.getItem("b12"),
-    b13: localStorage.getItem("b13"),
-    b14: localStorage.getItem("b14"),
-    b24: localStorage.getItem("b24"),
+    const [key, arr] = map[q];
+    set(key, arr[team - 1]);
 
-    c1: localStorage.getItem("c1"),
-    c2: localStorage.getItem("c2"),
-    c14: localStorage.getItem("c14"),
-    c24: localStorage.getItem("c24"),
-
-    d1: localStorage.getItem("d1"),
-    d2: localStorage.getItem("d2"),
-    d14: localStorage.getItem("d14"),
-    d24: localStorage.getItem("d24"),
-
-    w1: localStorage.getItem("w1"),
-    w2: localStorage.getItem("w2"),
-    w3: localStorage.getItem("w3"),
-    w4: localStorage.getItem("w4"),
-  };
-  saveBracket(bracketData, localStorage.getItem("name"));
-    document.getElementById("bt1").remove();
-  document.getElementById("bt2").remove();
-  document.getElementById("bt3").remove();
-    document.getElementById("group").innerText = "Sisesta nimi";
+    disableButton(team);
+    Tournament.koht++;
+    return;
   }
-  q++;
-  document.getElementById("bt1").disabled = false;
-  document.getElementById("bt2").disabled = false;
-  document.getElementById("bt3").disabled = false;
-  document.getElementById("bt"+ team).style.background = "#70cbef";
-  document.getElementById("bt1").style.background = "#2363ec";
-  document.getElementById("bt2").style.background = "#2363ec";
-  document.getElementById("bt3").style.background = "#2363ec";
+
+  // ---- STAGE ADVANCE ----
+  if (q === 1) {
+    set("a2", teams.r[team - 1]);
+    switchGroup("Alagrupp B", teams.h);
+  }
+
+  if (q === 2) {
+    set("b2", teams.h[team - 1]);
+    switchGroup("Alagrupp C", teams.m);
+  }
+
+  if (q === 3) {
+    set("c2", teams.m[team - 1]);
+    switchGroup("Alagrupp D", teams.k);
+  }
+
+  if (q === 4) {
+    set("d2", teams.k[team - 1]);
+    startQuarterFinals();
+  }
+
+  if (q === 5) {
+    set("a14", team === 1 ? get("a1") : get("b2"));
+    set("a24", team === 1 ? get("b2") : get("a1"));
+    setMatch(["c1", "d2"]);
+  }
+
+  if (q === 6) {
+    set("b14", team === 1 ? get("c1") : get("d2"));
+    set("b24", team === 1 ? get("d2") : get("c1"));
+    setMatch(["a2", "b1"]);
+  }
+
+  if (q === 7) {
+    set("c14", team === 1 ? get("a2") : get("b1"));
+    set("c24", team === 1 ? get("b1") : get("a2"));
+    setMatch(["c2", "d1"]);
+  }
+
+  if (q === 8) {
+    set("d14", team === 1 ? get("c2") : get("d1"));
+    set("group", "1/2");
+    setMatch(["a14", "b14"]);
+  }
+
+  if (q === 9) {
+    set("a12", team === 1 ? get("a14") : get("b14"));
+    setMatch(["c14", "d14"]);
+  }
+
+  if (q === 10) {
+    set("b12", team === 1 ? get("c14") : get("d14"));
+    set("group", "3/4");
+    setMatch(["a13", "b13"]);
+  }
+
+  if (q === 11) {
+    set("w3", team === 1 ? get("a13") : get("b13"));
+    set("w4", team === 1 ? get("b13") : get("a13"));
+    setMatch(["a12", "b12"]);
+  }
+
+  if (q === 12) {
+    set("w1", team === 1 ? get("a12") : get("b12"));
+    set("w2", team === 1 ? get("b12") : get("a12"));
+
+    const bracketData = {};
+    Object.keys(localStorage).forEach(k => {
+      bracketData[k] = localStorage.getItem(k);
+    });
+
+    saveBracket(bracketData, get("name"));
+
+    endTournament();
+  }
+
+  Tournament.q++;
+  resetButtons(team);
 }
+
+// ===== HELPERS =====
+function get(k) {
+  return localStorage.getItem(k);
 }
-  if (q==13 && on){
-    bracket();
-  }
-function bracket(){
-  document.getElementById("smegma").innerHTML = '<html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <title>VHK g&uumlmnaasiumi jalgpalliturniir</title> <style> body { font-family: Arial, sans-serif; background: #0f172a; color: white; padding: 40px; } .bracket { display: flex; gap: 60px; align-items: center; } .round { display: flex; flex-direction: column; justify-content: space-around; height: 600px; } .match { position: relative; margin: 10px 0; } .team { width: 180px; padding: 12px; background: #1e293b; border: 2px solid #334155; border-radius: 8px; margin: 6px 0; text-align: center; } /* Connector lines */ .match::after { content: ""; position: absolute; right: -30px; top: 50%; width: 30px; border-top: 2px solid white; } .round:not(:last-child) .match::before { content: ""; position: absolute; right: -30px; top: 50%; height: 120px; border-right: 2px solid white; } h2 { text-align: center; margin-bottom: 20px; } </style> </head> <body> <h1>VHK g&uumlmnaasiumi jalgpalliturniir</h1> <div class="bracket"> <!-- Quarter Finals --> <div class="round"> <h2>Veerand Finaalid</h2> <div class="match"> <div id="a1" class="team">u</div> <div id="b2"class="team"></div> </div> <div class="match"> <div id="c1" class="team"></div> <div id="d2" class="team"></div> </div> <div class="match"> <div id="a2" class="team"></div> <div id="b1" class="team"></div> </div> <div class="match"> <div id="c2" class="team"></div> <div id="d1" class="team"></div> </div> </div> <!-- Semi Finals --> <div class="round"> <h2>Poolfinaalid</h2> <div class="match"> <div id="a14" class="team"></div> <div id="b14" class="team"></div> </div> <div class="match"> <div id="c14" class="team"></div> <div id="d14" class="team"></div> </div> </div> <!-- Final --> <div style="height: 50px;" class="round"> <h2>Finaal</h2> <div class="match"> <div id="a12" class="team"></div> <div id="b12" class="team"></div> </div> <h2 style="margin-bottom: 5px;">3/4</h2> <div class="match"> <div id="a13" class="team"></div> <div id="b13" class="team"></div> </div> </div> <script src="Jalka.js"></script> </body> </html>';
-    document.getElementById("a1").innerText = localStorage.getItem("a1");
-    document.getElementById("a2").innerText = localStorage.getItem("a2");
-    document.getElementById("a12").innerText = localStorage.getItem("a12");
-    document.getElementById("a13").innerText = localStorage.getItem("a13");
-    document.getElementById("a14").innerText = localStorage.getItem("a14");
-    document.getElementById("b1").innerText = localStorage.getItem("b1");
-    document.getElementById("b2").innerText = localStorage.getItem("b2");
-    document.getElementById("b12").innerText = localStorage.getItem("b12");
-    document.getElementById("b13").innerText = localStorage.getItem("b13");
-    document.getElementById("b14").innerText = localStorage.getItem("b14");
-    document.getElementById("c1").innerText = localStorage.getItem("c1");
-    document.getElementById("c2").innerText = localStorage.getItem("c2");
-    document.getElementById("c14").innerText = localStorage.getItem("c14");
-    document.getElementById("d1").innerText = localStorage.getItem("d1");
-    document.getElementById("d2").innerText = localStorage.getItem("d2");
-    document.getElementById("d14").innerText = localStorage.getItem("d14");
-  }
+
+function setMatch(keys) {
+  document.getElementById("bt1").innerText = get(keys[0]);
+  document.getElementById("bt2").innerText = get(keys[1]);
 }
+
+function switchGroup(name, newTeams) {
+  document.getElementById("group").innerText = name;
+  document.getElementById("bt1").innerText = newTeams[0];
+  document.getElementById("bt2").innerText = newTeams[1];
+  document.getElementById("bt3").innerText = newTeams[2];
+  Tournament.koht = 1;
+}
+
+function disableButton(team) {
+  const btn = document.getElementById("bt" + team);
+  btn.disabled = true;
+  btn.style.background = "#70cbef";
+}
+
+function resetButtons(team) {
+  ["bt1", "bt2", "bt3"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.disabled = false;
+      el.style.background = "#2363ec";
+    }
+  });
+
+  const active = document.getElementById("bt" + team);
+  if (active) active.style.background = "#70cbef";
+}
+
+// ===== FINAL SCREEN =====
+function endTournament() {
+  document.getElementById("bt1")?.remove();
+  document.getElementById("bt2")?.remove();
+  document.getElementById("bt3")?.remove();
+
+  document.getElementById("group").innerText = "Sisesta nimi";
+}
+
+// ===== SAVE =====
 async function saveBracket(brack, name) {
+  const res = await fetch("http://localhost:3000/save-bracket", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ bracket: brack, name })
+  });
 
-const response = await fetch("http://localhost:3000/save-bracket" ,{
-method: "POST",
-headers: {
-"Content-Type": "application/json"
-},
-body: JSON.stringify({
-  bracket: brack,
-  name: name
-}),
-});
-
-const result = await response.json();
-console.log(result);
+  return await res.json();
 }
+
+// ===== NAME =====
 function saveName(event) {
   event.preventDefault();
 
   const nimi = document.getElementById("nimi").value;
-
   localStorage.setItem("name", nimi);
-  on=true;
 
-  // optional: move to game screen
+  Tournament.on = true;
+
   alert("Nimi salvestatud: " + nimi);
-  document.getElementById("vorm").remove();
+  document.getElementById("vorm")?.remove();
 }
