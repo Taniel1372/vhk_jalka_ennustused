@@ -3,12 +3,13 @@ let koht = 1;
 let on = false;
 let nameReady = false;
 
+// TEAMS
 const r_10 = "10R";
 const r_11 = "11R";
 const r_12 = "12R";
 const h_10 = "10H";
 const h_11 = "11H";
-const h_12 = "12H";
+const h_12 = "11H";
 const m_10 = "10M";
 const m_11 = "11M";
 const m_12 = "12M";
@@ -36,7 +37,7 @@ function saveName(event) {
 // ================= PICK WINNER =================
 function pickWinner(team) {
 
-  // 🔒 BLOCK UNTIL NAME EXISTS
+  // BLOCK UNTIL NAME EXISTS
   if (!nameReady || !localStorage.getItem("name")) {
     alert("Sisesta nimi enne mängu alustamist!");
     return;
@@ -191,21 +192,63 @@ function pickWinner(team) {
     document.getElementById("bt1").disabled = false;
     document.getElementById("bt2").disabled = false;
     document.getElementById("bt3").disabled = false;
-
-    document.getElementById("bt"+ team).style.background = "#70cbef";
-    document.getElementById("bt1").style.background = "#2363ec";
-    document.getElementById("bt2").style.background = "#2363ec";
-    document.getElementById("bt3").style.background = "#2363ec";
   }
 }
 
-// ================= SAVE BRACKET =================
+// ================= BRACKET =================
+function bracket() {
+  document.getElementById("smegma").innerHTML = `
+    <h1>VHK gümnaasiumi jalgpalliturniir</h1>
+
+    <div id="a1"></div>
+    <div id="a2"></div>
+    <div id="b1"></div>
+    <div id="b2"></div>
+    <div id="c1"></div>
+    <div id="c2"></div>
+    <div id="d1"></div>
+    <div id="d2"></div>
+
+    <div id="a14"></div>
+    <div id="b14"></div>
+    <div id="c14"></div>
+    <div id="d14"></div>
+
+    <div id="a12"></div>
+    <div id="b12"></div>
+  `;
+
+  document.getElementById("a1").innerText = localStorage.getItem("a1");
+  document.getElementById("a2").innerText = localStorage.getItem("a2");
+  document.getElementById("b1").innerText = localStorage.getItem("b1");
+  document.getElementById("b2").innerText = localStorage.getItem("b2");
+  document.getElementById("c1").innerText = localStorage.getItem("c1");
+  document.getElementById("c2").innerText = localStorage.getItem("c2");
+  document.getElementById("d1").innerText = localStorage.getItem("d1");
+  document.getElementById("d2").innerText = localStorage.getItem("d2");
+
+  document.getElementById("a14").innerText = localStorage.getItem("a14");
+  document.getElementById("b14").innerText = localStorage.getItem("b14");
+  document.getElementById("c14").innerText = localStorage.getItem("c14");
+  document.getElementById("d14").innerText = localStorage.getItem("d14");
+
+  document.getElementById("a12").innerText = localStorage.getItem("a12");
+  document.getElementById("b12").innerText = localStorage.getItem("b12");
+}
+
+// ================= SAVE =================
 async function saveBracket(brack, name) {
   const response = await fetch("http://localhost:3000/save-bracket", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ bracket: brack, name })
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      bracket: brack,
+      name: name
+    })
   });
 
-  console.log(await response.json());
+  const result = await response.json();
+  console.log(result);
 }
