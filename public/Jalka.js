@@ -1,6 +1,7 @@
 let q = 1;
 let koht = 1;
 let on = false;
+let nameUsed = false;
 
 // TEAMS
 const r_10 = "10R", r_11 = "11R", r_12 = "12R";
@@ -8,21 +9,32 @@ const h_10 = "10H", h_11 = "11H", h_12 = "12H";
 const m_10 = "10M", m_11 = "11M", m_12 = "12M";
 const k_10 = "10A/K/C", k_11 = "11A/K/C", k_12 = "12K/C";
 
-// ================= CHECK IF READY =================
-function isReady() {
-  return localStorage.getItem("name") && on === true;
+// ================= NAME =================
+function saveName(event) {
+  event.preventDefault();
+
+  if (nameUsed) return; // only once
+
+  const nimi = document.getElementById("nimi").value;
+  localStorage.setItem("name", nimi);
+
+  on = true;
+  nameUsed = true;
+
+  alert("Nimi salvestatud: " + nimi);
+  document.getElementById("vorm").remove();
 }
 
 // ================= MAIN =================
 function pickWinner(team) {
 
-  // BLOCK EVERYTHING UNTIL NAME EXISTS
-  if (!isReady()) {
+  // BLOCK IF NO NAME
+  if (!localStorage.getItem("name")) {
     alert("Sisesta nimi enne mängu jätkamist!");
     return;
   }
 
-  // ================= GROUP PICKS (FIRST CLICK) =================
+  // ================= GROUP STAGE (FIRST CLICK) =================
   if (koht == 1 && q == 1) {
     localStorage.setItem("a1", team == 1 ? r_10 : team == 2 ? r_11 : r_12);
   }
@@ -36,7 +48,7 @@ function pickWinner(team) {
     localStorage.setItem("d1", team == 1 ? k_10 : team == 2 ? k_11 : k_12);
   }
 
-  // FIRST CLICK = lock selection
+  // FIRST CLICK BEHAVIOUR (LOCK BUTTON)
   if (koht == 1) {
     document.getElementById("bt" + team).disabled = true;
     document.getElementById("bt" + team).style.background = "#70cbef";
@@ -44,8 +56,8 @@ function pickWinner(team) {
     return;
   }
 
-  // ================= SECOND CLICK (ONLY IF READY) =================
-  if (koht == 2 && isReady()) {
+  // ================= SECOND CLICK =================
+  if (koht == 2) {
 
     if (q == 1) {
       localStorage.setItem("a2", team == 1 ? r_10 : team == 2 ? r_11 : r_12);
@@ -80,7 +92,6 @@ function pickWinner(team) {
       document.getElementById("bt1").style.background = "#2363ec";
       document.getElementById("bt2").style.background = "#2363ec";
       document.getElementById("loll")?.remove();
-      document.getElementById("bt3")?.remove();
 
       document.getElementById("group").innerText = "1/4";
 
@@ -162,7 +173,6 @@ function pickWinner(team) {
       document.getElementById("group").innerText = "Sisesta nimi";
     }
 
-    // ADVANCE ONLY AFTER VALID SECOND CLICK
     q++;
     koht = 1;
   }
@@ -170,7 +180,11 @@ function pickWinner(team) {
   // ================= RESET UI =================
   document.getElementById("bt1").disabled = false;
   document.getElementById("bt2").disabled = false;
-  document.getElementById("bt3")?.remove();
+
+  if (document.getElementById("bt3")) {
+    document.getElementById("bt3").disabled = false;
+    document.getElementById("bt3").style.background = "#2363ec";
+  }
 
   document.getElementById("bt1").style.background = "#2363ec";
   document.getElementById("bt2").style.background = "#2363ec";
@@ -187,17 +201,4 @@ async function saveBracket(brack, name) {
   });
 
   console.log(await response.json());
-}
-
-// ================= NAME =================
-function saveName(event) {
-  event.preventDefault();
-
-  const nimi = document.getElementById("nimi").value;
-  localStorage.setItem("name", nimi);
-
-  on = true;
-
-  alert("Nimi salvestatud: " + nimi);
-  document.getElementById("vorm").remove();
 }
