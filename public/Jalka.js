@@ -12,7 +12,6 @@ const m_12 = "12M";
 const k_10 = "10A/K/C";
 const k_11 = "11A/K/C";
 const k_12 = "12K/C";
-localStorage.setItem("name", "Siur");
 
 
 function pickWinner(team) {
@@ -156,9 +155,8 @@ else {
     w3: localStorage.getItem("w3"),
     w4: localStorage.getItem("w4"),
   };
-
   saveBracket(bracketData, localStorage.getItem("name"));
-  names();
+  
   }
   q++;
   document.getElementById("bt1").disabled = false;
@@ -168,9 +166,6 @@ else {
   document.getElementById("bt1").style.background = "#2363ec";
   document.getElementById("bt2").style.background = "#2363ec";
   document.getElementById("bt3").style.background = "#2363ec";
-}
-function names(){
-  document.getElementById("Neg").innerHTML = "<form><input type='text' value='Eesnimi'><br><input type='text' value='Eesnimi'><br><input type='submit' onclick='bracket()' value='nEG'>";
 }
 function bracket(){
   document.getElementById("smegma").innerHTML = '<html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <title>VHK g&uumlmnaasiumi jalgpalliturniir</title> <style> body { font-family: Arial, sans-serif; background: #0f172a; color: white; padding: 40px; } .bracket { display: flex; gap: 60px; align-items: center; } .round { display: flex; flex-direction: column; justify-content: space-around; height: 600px; } .match { position: relative; margin: 10px 0; } .team { width: 180px; padding: 12px; background: #1e293b; border: 2px solid #334155; border-radius: 8px; margin: 6px 0; text-align: center; } /* Connector lines */ .match::after { content: ""; position: absolute; right: -30px; top: 50%; width: 30px; border-top: 2px solid white; } .round:not(:last-child) .match::before { content: ""; position: absolute; right: -30px; top: 50%; height: 120px; border-right: 2px solid white; } h2 { text-align: center; margin-bottom: 20px; } </style> </head> <body> <h1>VHK g&uumlmnaasiumi jalgpalliturniir</h1> <div class="bracket"> <!-- Quarter Finals --> <div class="round"> <h2>Veerand Finaalid</h2> <div class="match"> <div id="a1" class="team">u</div> <div id="b2"class="team"></div> </div> <div class="match"> <div id="c1" class="team"></div> <div id="d2" class="team"></div> </div> <div class="match"> <div id="a2" class="team"></div> <div id="b1" class="team"></div> </div> <div class="match"> <div id="c2" class="team"></div> <div id="d1" class="team"></div> </div> </div> <!-- Semi Finals --> <div class="round"> <h2>Poolfinaalid</h2> <div class="match"> <div id="a14" class="team"></div> <div id="b14" class="team"></div> </div> <div class="match"> <div id="c14" class="team"></div> <div id="d14" class="team"></div> </div> </div> <!-- Final --> <div style="height: 50px;" class="round"> <h2>Finaal</h2> <div class="match"> <div id="a12" class="team"></div> <div id="b12" class="team"></div> </div> <h2 style="margin-bottom: 5px;">3/4</h2> <div class="match"> <div id="a13" class="team"></div> <div id="b13" class="team"></div> </div> </div> <script src="Jalka.js"></script> </body> </html>';
@@ -208,6 +203,13 @@ body: JSON.stringify({
 const result = await response.json();
 console.log(result);
 }
-function nimesalvestamine(){
-  
+function saveName(event) {
+  event.preventDefault();
+
+  const nimi = document.getElementById("nimi").value;
+
+  localStorage.setItem("name", nimi);
+
+  // optional: move to game screen
+  alert("Nimi salvestatud: " + nimi);
 }
