@@ -171,6 +171,7 @@ else {
   document.getElementById("bt2").style.background = "#2363ec";
   document.getElementById("bt3").style.background = "#2363ec";
 }
+}
   if (q==13 && on){
     bracket();
   }
