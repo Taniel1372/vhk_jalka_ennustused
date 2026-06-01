@@ -1,26 +1,43 @@
 let q = 1;
 let koht = 1;
+let on = false;
+let nameReady = false;
+
 const r_10 = "10R";
 const r_11 = "11R";
 const r_12 = "12R";
 const h_10 = "10H";
 const h_11 = "11H";
 const h_12 = "12H";
-const m_10 = "10M/C";
+const m_10 = "10M";
 const m_11 = "11M";
 const m_12 = "12M";
 const k_10 = "10A/K/C";
 const k_11 = "11A/K/C";
 const k_12 = "12K/C";
 
-let nameReady = false;
-let on = false;
+// ================= NAME =================
+function saveName(event) {
+  event.preventDefault();
+
+  if (nameReady) return;
+
+  const nimi = document.getElementById("nimi").value;
+
+  localStorage.setItem("name", nimi);
+
+  on = true;
+  nameReady = true;
+
+  alert("Nimi salvestatud: " + nimi);
+  document.getElementById("vorm").remove();
+}
 
 // ================= PICK WINNER =================
 function pickWinner(team) {
 
-  // ❗ BLOCK GAME UNTIL NAME IS ENTERED
-  if (!nameReady) {
+  // 🔒 BLOCK UNTIL NAME EXISTS
+  if (!nameReady || !localStorage.getItem("name")) {
     alert("Sisesta nimi enne mängu alustamist!");
     return;
   }
@@ -180,4 +197,15 @@ function pickWinner(team) {
     document.getElementById("bt2").style.background = "#2363ec";
     document.getElementById("bt3").style.background = "#2363ec";
   }
+}
+
+// ================= SAVE BRACKET =================
+async function saveBracket(brack, name) {
+  const response = await fetch("http://localhost:3000/save-bracket", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ bracket: brack, name })
+  });
+
+  console.log(await response.json());
 }
