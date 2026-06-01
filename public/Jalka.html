@@ -22,10 +22,10 @@
 
   </div>
   <div>
-    <form action="nimesalvestamine()">
-      <input type="text" id="nimi" name="nimi" value="Ees- ja perekonnanimi" style="border-radius: 40px;  background-color: #0f172a; color: aliceblue; font-family: 'Courier New', Courier, monospace;"><br>
-      <input type="submit" value="Valmis">
-    </form>
+    <form onsubmit="saveName(event)">
+  <input type="text" id="nimi" placeholder="Sisesta nimi" required>
+  <input type="submit" value="Valmis">
+</form>
   </div>
 
   <script src="Jalka.js"></script>
