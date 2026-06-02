@@ -198,7 +198,7 @@ function bracket(){
 }
 async function saveBracket(brack, name) {
 
-const response = await fetch("/predictions" ,{
+const response = await fetch("/save-bracket" ,{
 method: "POST",
 headers: {
 "Content-Type": "application/json"
