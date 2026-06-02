@@ -6,15 +6,11 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 70vh;
+  min-height: 100vh;
 }
 
 .container {
   text-align: center;
-}
-
-.match {
-  margin: 30px;
 }
 
 button {
@@ -58,4 +54,21 @@ body{
     width:120px;
     padding:10px;
     font-size:14px;
+}
+.match{
+    background: #1e293b;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    padding: 12px;
+    margin: 15px 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.team{
+    width: 140px;
+    padding: 10px;
+    margin: 5px 0;
+    background: #0f172a;
+    border-radius: 8px;
+    text-align: center;
 }
