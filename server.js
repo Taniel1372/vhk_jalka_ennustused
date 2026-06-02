@@ -18,6 +18,11 @@ app.get("/", (req, res) => {
   );
 });
 
+app.get("/predictions", (req, res) => {
+  const raw = fs.readFileSync("predictions.json", "utf8");
+  res.json(JSON.parse(raw));
+});
+
 app.post("/save-bracket", (req, res) => {
 
   const bracket = req.body.bracket;
