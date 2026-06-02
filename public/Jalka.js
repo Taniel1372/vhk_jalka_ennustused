@@ -177,69 +177,7 @@ else {
   document.getElementById("bt3").style.background = "#2363ec";
 }
 function bracket(){
-  document.body.innerHTML = '
-<h1>VHK Gümnaasiumi Jalgpalliturniir</h1>
-
-<div class="bracket-container">
-  <div class="bracket">
-
-    <div class="round">
-      <h2>1/4</h2>
-
-      <div class="match">
-        <div id="a1" class="team"></div>
-        <div id="b2" class="team"></div>
-      </div>
-
-      <div class="match">
-        <div id="c1" class="team"></div>
-        <div id="d2" class="team"></div>
-      </div>
-
-      <div class="match">
-        <div id="a2" class="team"></div>
-        <div id="b1" class="team"></div>
-      </div>
-
-      <div class="match">
-        <div id="c2" class="team"></div>
-        <div id="d1" class="team"></div>
-      </div>
-    </div>
-
-    <div class="round">
-      <h2>1/2</h2>
-
-      <div class="match">
-        <div id="a14" class="team"></div>
-        <div id="b14" class="team"></div>
-      </div>
-
-      <div class="match">
-        <div id="c14" class="team"></div>
-        <div id="d14" class="team"></div>
-      </div>
-    </div>
-
-    <div class="round">
-      <h2>Final</h2>
-
-      <div class="match">
-        <div id="a12" class="team"></div>
-        <div id="b12" class="team"></div>
-      </div>
-
-      <h2>3/4</h2>
-
-      <div class="match">
-        <div id="a13" class="team"></div>
-        <div id="b13" class="team"></div>
-      </div>
-    </div>
-
-  </div>
-</div>
-';
+  document.body.innerHTML = '<h1>VHK Gümnaasiumi Jalgpalliturniir</h1> <div class="bracket-container"> <div class="bracket"> <div class="round"> <h2>1/4</h2> <div class="match"> <div id="a1" class="team"></div> <div id="b2" class="team"></div> </div> <div class="match"> <div id="c1" class="team"></div> <div id="d2" class="team"></div> </div> <div class="match"> <div id="a2" class="team"></div> <div id="b1" class="team"></div> </div> <div class="match"> <div id="c2" class="team"></div> <div id="d1" class="team"></div> </div> </div> <div class="round"> <h2>1/2</h2> <div class="match"> <div id="a14" class="team"></div> <div id="b14" class="team"></div> </div> <div class="match"> <div id="c14" class="team"></div> <div id="d14" class="team"></div> </div> </div> <div class="round"> <h2>Final</h2> <div class="match"> <div id="a12" class="team"></div> <div id="b12" class="team"></div> </div> <h2>3/4</h2> <div class="match"> <div id="a13" class="team"></div> <div id="b13" class="team"></div> </div> </div> </div> </div>';
     document.getElementById("a1").innerText = localStorage.getItem("a1");
     document.getElementById("a2").innerText = localStorage.getItem("a2");
     document.getElementById("a12").innerText = localStorage.getItem("a12");
