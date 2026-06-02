@@ -198,7 +198,7 @@ function bracket(){
 }
 async function saveBracket(brack, name) {
 
-const response = await fetch("http://localhost:3000/save-bracket" ,{
+const response = await fetch("/predictions" ,{
 method: "POST",
 headers: {
 "Content-Type": "application/json"
@@ -210,7 +210,7 @@ body: JSON.stringify({
 });
 
 const result = await response.json();
-console.log(result);
+alert(result);
 }
 function saveName(event) {
   event.preventDefault();
